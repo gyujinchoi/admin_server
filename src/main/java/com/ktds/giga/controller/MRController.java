@@ -11,7 +11,7 @@ public class MRController {
 	public MRListVO MRList() {
 		
 		MRListVO vo = new MRListVO();
-		vo.setName("Test Nmae");
+		vo.setName("Test Name");
 		vo.setPhone_no("01065501469");
 		return vo;
 	}
