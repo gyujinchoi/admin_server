@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<!--
+Template Name: Chevesic
+Author: <a href="http://www.os-templates.com/">OS Templates</a>
+Author URI: http://www.os-templates.com/
+Licence: Free to use under our free template licence terms
+Licence URI: http://www.os-templates.com/template-terms
+-->
+<html lang="">
+<!-- To declare your language - read more here: https://www.w3.org/International/questions/qa-html-language-declarations -->
+<head>
+<title>LEAGUE MANAGER</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link href="layout/styles/layout.css" rel="stylesheet" type="text/css" media="all">
+<script type="text/javascript">
+var league = [];
+var gamelist = [];
+  window.onload = function(){
+      //competition 조회
+      loadleague();
+      //Event 조회
+      loadEvent();
+      //GameTable 조회
+      // loadGameTable();
+  }
+function loadleague() {
+  var xhttp = new XMLHttpRequest();
+  var url = "http://52.79.188.98:3000/competition/get";
+  xhttp.open("get", url, false);
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send();
+    
+  if (xhttp.readyState === 4) {
+      if (xhttp.status === 200) {
+        var jsonResponse = JSON.parse(xhttp.responseText); 
+        //alert(xhttp.responseText);
+        //정상 여부 확인 필요 할듯
+        var select = document.getElementById('competition');
+        for (var i = 0; i< jsonResponse.length; i++){
+            var opt = document.createElement('option');
+            opt.value = jsonResponse[i].competition_id;
+            opt.text = jsonResponse[i].title;
+            // opt.innerHTML = i;
+            select.appendChild(opt);
+            league.push(jsonResponse[i]);
+            
+        }
+        select.selectedIndex = 0;
+        
+      } else {
+        alert("저장에 실패 했습니다.");
+      }
+    }
+}
+function loadEvent() {
+    var xhttp = new XMLHttpRequest();
+    var url = "http://52.79.188.98:3000/competition/event/get";
+    var selectCompetion = document.getElementById('competition');
+    url += "?competition_id=" + selectCompetion.options[selectCompetion.selectedIndex].value;
+    xhttp.open("get", url, false);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
+    
+    if (xhttp.readyState === 4) {
+        if (xhttp.status === 200) {
+          var jsonResponse = JSON.parse(xhttp.responseText); 
+            //alert(xhttp.responseText);
+            //정상 여부 확인 필요 할듯
+            var select = document.getElementById('game');
+            select.innerHTML = "";
+            for (var i = 0; i<jsonResponse.length; i++){
+                var opt = document.createElement('option');
+                opt.value = jsonResponse[i].event_id;
+                opt.text = jsonResponse[i].title;
+                // opt.innerHTML = i;
+                select.appendChild(opt);
+                gamelist.push(jsonResponse[i]);
+            }
+          //정상 여부 확인 필요 할듯
+        } else {
+          alert(xhttp.responseText);
+        }
+      }
+      loadGameTable();
+    
+  }
+  function loadGameTable() {
+    tableclear();
+    var xhttp = new XMLHttpRequest();
+    url = "http://52.79.188.98:3000/game/getmatches?event_id="+competitionForm.game.value;
+    xhttp.open("get", url, false);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
+    if (xhttp.readyState === 4) {
+          if (xhttp.status === 200) {
+            var jsonResponse = JSON.parse(xhttp.responseText);
+            makeTable(Object.keys(jsonResponse).length, jsonResponse); 
+          }
+      } else {
+        alert(xhttp.responseText);
+      }
+      
+    }
+  function tableclear() {
+    document.getElementById("leagueTable").innerHTML = '';
+  } 
+  function makeTable(count, jsonResponse) {
+    var Tableline = count / 4;
+    var TablelineLast = count % 4;
+    var index = 1;
+    var keys = [];
+    for (var key in jsonResponse) {
+      if (jsonResponse.hasOwnProperty(key)) {
+        keys.push(key);
+      }
+    }
+    for(var i = 0; i < Tableline; i++)
+    {
+        makeHeader(4, index);
+        // makeBody(4, index, jsonResponse[keys[index-1]]);
+        makeBody(4, index, jsonResponse, keys);
+        index += 4;
+    }
+    if(TablelineLast > 0)
+    {
+      makeHeader(TablelineLast, index);
+      makeBody(TablelineLast, index);
+    }
+    // makeBody(TablelineLast, index);
+    
+    // var table = document.createElement("TABLE");
+    // table.setAttribute("id", "myTable");
+    // document.getElementById("leagueTable").appendChild(table);
+  } 
+  function makeHeader(count, index) {
+    var thead = document.createElement("thead");
+    thead.setAttribute("id", "myThead"+index);
+    document.getElementById("leagueTable").appendChild(thead)
+    var Headtr = document.createElement("tr");
+    Headtr.setAttribute("id", "myHTr"+index);
+    document.getElementById("myThead"+index).appendChild(Headtr);
+    for(var i = 0; i < count; i++) {
+      var Htd = document.createElement("th");
+      // Htd.width = "40px";
+      Htd.setAttribute("width", "400px");
+      Htd.setAttribute("align", "center");
+      var HText = document.createTextNode(index+i+"조");
+      Htd.appendChild(HText);
+      document.getElementById("myHTr"+index).appendChild(Htd);
+    }
+    
+  }
+  function makeBody(count, index, jsonResponse, keys) {
+    var tbody = document.createElement("tbody");
+    tbody.setAttribute("id", "myTbody"+index);
+    document.getElementById("leagueTable").appendChild(tbody);
+    for(var i = 0; i < count; i++) {
+        var data = jsonResponse[keys[index-1+i]].matches;
+        var textlist = makeMatchText(data);
+        for(var j = 0; j < textlist.length; j++)
+        {
+          var bodyTR = document.createElement("tr");
+          bodyTR.setAttribute("id", "myTr"+index+j);
+          document.getElementById("myTbody"+index).appendChild(bodyTR);
+          var bodyTD = document.createElement("td");
+          var z = document.createTextNode(textlist[j]);
+          bodyTD.appendChild(z);
+          bodyTD.setAttribute("align", "center");
+          document.getElementById("myTr"+index+j).appendChild(bodyTD);
+        }
+      }
+  }
+  function makeMatchText(data)
+  {
+    var textlist =[];
+    var text = "";
+    for(var i = 0; i < data.length; i++)
+    {
+      if(data[i].teams.length == 2)
+      {
+        text += data[i].teams[0].name;
+        text += " vs ";
+        text += data[i].teams[1].name;
+      }
+      else if (data[i].teams.length == 4) {
+        text += data[i].teams[0].name;
+        text += " & ";
+        text += data[i].teams[1].name;
+        text += " vs ";
+        text += data[i].teams[2].name;
+        text += " & ";
+        text += data[i].teams[3].name;
+      }
+      textlist.push(text);
+      text = "";
+    }
+    return textlist;
+  }
+  function updateGameInfo()
+  {
+    loadGameTable();
+  }
+</script>
+
+ <style type="text/css">
+.select-style {
+    padding: 0;
+    margin: 2px;
+    margin-bottom:15px;
+    border: 1px solid #9D8D65;
+    width: 120px;
+    border-radius: 3px;
+    overflow: hidden;
+    background-color: black;
+    background: black no-repeat 90% 50%;
+}
+.select-style select {
+    padding: 1px 4px;
+    width: 130%;
+    border: none;
+    box-shadow: none;
+    background-color: black;
+    background-image: none;
+    color: #FFFFFF;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+}
+.select-style select:focus {
+    outline: none;
+  border-color:#9D8D65;
+}
+  </style>
+</head>
+<body id="top">
+<!-- ################################################################################################ -->
+<!-- ################################################################################################ -->
+<!-- ################################################################################################ -->
+<!-- Top Background Image Wrapper -->
+
+    <header id="header" class="hoc clear"> 
+      <!-- ################################################################################################ -->
+      <div id="logo" class="fl_left">
+        <h1><a href="index.html">TABLE TENNIS</a></h1>
+        <p>LEAGUE MANAGER</p>
+      </div>
+      <div id="quickinfo" class="fl_right">
+        <ul class="nospace inline">
+          <li><strong>Phone:</strong><br>
+            +82 (010) 1234 5678</li>
+          <li><strong>E-mail:</strong><br>
+            indal@kaist.ac.kr</li>
+        </ul>
+      </div>
+      <!-- ################################################################################################ -->
+    </header>
+    <nav id="mainav" class="hoc clear"> 
+      <!-- ################################################################################################ -->
+      <ul class="clear">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="makeleague.html">MAKE LEAGUE</a></li>
+        <!-- <li><a href="makeGameType.html">MAKE GAME EVENTS</a></li> -->
+        <li><a href="joinleague.html">JOIN LEAGUE</a></li>
+        <li class="active"><a href="#">GAME TABLE</a></li>
+        <li><a class="drop" href="#">GAME STATUS</a>
+          <ul>
+            <li><a href="score.html">Score Status</a></li>
+            <li><a href="scoreInput.html">Score Input</a></li>
+          </ul>
+        </li>
+      </ul>
+      <!-- ################################################################################################ -->
+    </nav>
+
+<div class="bgded" style="background-image:url('images/demo/backgrounds/tabletennis.jpg');"> 
+  <!-- ################################################################################################ -->
+  <!-- ################################################################################################ -->
+  <!-- ################################################################################################ -->
+  <div class="wrapper row1">
+  <footer id="footer" class="hoc clear"> 
+    <!-- ################################################################################################ -->
+     
+      
+      <form name="competitionForm" method="post" action="#">
+       <div class="select-style" style="float: left; width: 50%;"">
+      <select class="btmspace-15" id="competition" onchange="loadEvent()"></select>
+      </div>
+      <div class="select-style" style="float: left; width: 49%;">
+      <select class="btmspace-15" id="game" onchange="updateGameInfo()" ></select>
+      </div>
+      <div id="league" class="scrollable">
+      <strong>1조</strong>
+        <table id="leagueTable">
+          
+        </table>
+      </div>
+      </form>
+    
+    <!-- ################################################################################################ -->
+  </footer>
+</div></div>
+ 
+<!-- ################################################################################################ -->
+<!-- ################################################################################################ -->
+<!-- ################################################################################################ -->
+<a id="backtotop" href="#top"><i class="fa fa-chevron-up"></i></a>
+<script src="layout/scripts/jquery.min.js"></script>
+<script src="layout/scripts/jquery.backtotop.js"></script>
+<script src="layout/scripts/jquery.mobilemenu.js"></script>
+</body>
+</html>
