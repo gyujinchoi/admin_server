@@ -1,6 +1,8 @@
 package com.ktds.giga.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,16 +17,19 @@ public class SRController {
 	@Autowired
 	private SRService service;
 	
-	@RequestMapping("/srList")
+	@RequestMapping("/selectSRList")
 	public List<SRListVO> retieveSR() throws Exception {
-		
 		return service.retieveSR();
 	}
 	
-	@RequestMapping("/srInsert")
-	public String insertSR(SRListVO sr) throws Exception {
+	@RequestMapping("/insertSR")
+	public Map<String, String> insertSR(SRListVO sr) throws Exception {
+		Map<String, String> resultMap = new HashMap<String, String>();
 		
 		service.insrtSR(sr);
-		return "성공";
+		
+		resultMap.put("resultCode", "0000");
+		resultMap.put("resultMsg", "저장 성공");
+		return resultMap;
 	}
 }

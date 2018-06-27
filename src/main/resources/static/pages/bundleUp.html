@@ -301,6 +301,30 @@
                     <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
+                  <!-- /.panel-heading -->
+                       <div class="panel-body">
+                       		<div>
+                       			<h3>◎ 배포 버전 : <select id= "mrVer" name="mrVer" onchange="chageLangSelect()"></select></h3> <br>
+                       		</div>
+                           <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                               <thead>
+                                   <tr>
+                                   		<th>선택</th>
+                                       <th>시스템구분</th>
+                                       <th>배포버전</th>
+										<th>상태</th>
+                                       <th>SR 번호</th>
+                                       <th>제목</th>
+                                       <th>등록일자</th>
+									<th>요구사항 내용</th>
+									<th>개발자</th>
+                                   </tr>
+                               </thead>
+                               <tbody id ='srTbody'>
+                               </tbody>
+                           </table>
+                         </div>
+                       <!-- /.panel-body -->
             </div>
             <!-- /.container-fluid -->
         </div>
@@ -320,6 +344,65 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
+    
+        <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    <script>
+    //https://editor.datatables.net/examples/advanced/REST.html
+    $(document).ready(function() {
+    	
+    	
+    	let dropdown = $('#mrVer');
+
+    	dropdown.empty();
+
+    	dropdown.append('<option selected="true" disabled>Choose Version</option>');
+    	dropdown.prop('selectedIndex', 0);
+
+    	const url = '/selectMrVer';
+    	$.getJSON(url, function (data) {
+    		$.each(data, function (index, item) {
+	    	    dropdown.append($('<option></option>').attr('value', item).text(item));
+    	  })
+     	  
+    	});
+    	
+    });
+    
+    function chageLangSelect(){
+        var versionSelect = document.getElementById("mrVer");
+         
+        // select element에서 선택된 option의 value가 저장된다.
+        var selectValue = versionSelect.options[versionSelect.selectedIndex].value;
+        //alert(selectValue);
+        
+        $('#dataTables-example > tbody').empty();
+        var url='/selectSRListByVer';  
+        var params="?mrVersion="+selectValue
+       
+         $.getJSON(url+params, function(data) {
+ 	    	var items = [];
+ 	    	$.each(data, function(key, val) {
+ 	    		items.push("<tr>");
+ 	    		items.push("<td id='choice'><input type='checkbox' name='_selected_' value='ROW_1'></td>");
+ 	    		items.push("<td id=''"+key+"''>"+val.system_name+"</td>");
+ 	    		items.push("<td id=''"+key+"''>"+val.mr_version+"</td>");
+ 	    		items.push("<td id=''"+key+"''>"+val.status+"</td>");
+ 	    		items.push("<td id=''"+key+"''>"+val.sr_id+"</td>");
+ 	    		items.push("<td id=''"+key+"''>"+val.subject+"</td>");
+ 	    		items.push("<td id=''"+key+"''>"+val.reg_date+"</td>");
+ 	    		items.push("<td id=''"+key+"''>"+val.description+"</td>");
+ 	    		items.push("<td id='tt'><select id= 'mrVer' name='mrVer'></select></td>");
+ 	    		items.push("</tr>");
+ 	    	});
+ 	    	$("<tbody/>", {html: items.join("")}).appendTo("table");
+ 	    	//console.log(data);
+              
+        });  
+
+    }
+    
+    </script>
+    
 
 </body>
 

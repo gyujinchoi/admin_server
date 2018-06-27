@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+</head>
+<body>
+<button onclick="ajaxTest();">Ajax배열데이터전송_테스트</button>
+</body>
+<!-- jQuery -->
+<script src="../vendor/jquery/jquery.min.js"></script>
+
+<script type="text/javascript">
+    function ajaxTest(){
+    	
+       var arr = new Array(); //Object를 배열로 저장할 Array
+       var obj = new Object(); //key, value형태로 저장할 Object
+        
+       obj.trackerId = "04";
+       obj.projectId = "71";
+       arr.push(obj);
+        
+       obj = new Object();
+       obj.trackerId = "04";
+       obj.projectId = "71";
+       arr.push(obj);
+ 		
+        $.ajax({
+            url: "/issuesInsert",
+            type: "POST",
+            data: JSON.stringify(arr), //Array를 JSON string형태로 변환
+            dataType: "json",
+            contentType: "application/json",
+            success: function(data) {
+            },
+            error:function(data){
+            }
+        });
+    }
+</script>
+
+</html>

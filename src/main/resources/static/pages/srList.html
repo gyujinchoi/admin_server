@@ -384,10 +384,9 @@
 
     <!-- Page-Level Demo Scripts - Tables - Use for reference -->
     <script>
-    var editor;
     //https://editor.datatables.net/examples/advanced/REST.html
     $(document).ready(function() {
-	    $.getJSON("http://localhost:8080/srList", function(data) {
+	    $.getJSON("/selectSRList", function(data) {
 	    	var items = [];
 	    	$.each(data, function(key, val) {
 	    		items.push("<tr>");

@@ -7,12 +7,12 @@
             SELECT 
             	* 
             FROM 
-            	redmine.service_requset
+            	redmine.service_request
     </select>
     
     <insert id="srInsert" parameterType="com.ktds.giga.domain.SRListVO">
             INSERT INTO 
-            redmine.service_requset (system_name, mr_version, status, sr_id, subject,reg_date,description,spec)
+            redmine.service_request (system_name, mr_version, status, sr_id, subject,reg_date,description,spec)
  			VALUES(#{system_name},#{mr_version},#{status},#{sr_id},#{subject},now(),#{description},#{spec})
     </insert>
     

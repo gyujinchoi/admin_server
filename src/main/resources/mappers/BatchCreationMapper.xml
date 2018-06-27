@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ktds.giga.mapper.BatchCreationMapper">
+    
+    <insert id="issuesInsert" parameterType="com.ktds.giga.domain.BatchCreationVO">
+ 			
+		INSERT INTO 
+			redmine.issues (tracker_id, project_id, subject, status_id, priority_id,author_id,lock_version, done_ratio, is_private, lft, rgt, created_on, updated_on )
+		VALUES('6', '72', 'insert Test22', '1', '2', '500', '2', '0', false, '1', '2', now(), now());
+    </insert>
+    
+    
+
+ 	
+    <select id="selectMrVer" resultType="String">
+	    SELECT distinct(mr_version)
+	 	FROM redmine.service_request
+	 	ORDER BY mr_version asc;
+    </select>
+    
+    <select id="selectSRListByVer" resultType="com.ktds.giga.domain.SRListVO">
+     	SELECT *
+		FROM redmine.service_request
+		WHERE mr_version = #{mr_version};
+	</select>	
+</mapper>

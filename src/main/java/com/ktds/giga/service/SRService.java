@@ -20,4 +20,6 @@ public class SRService {
 	public void insrtSR(SRListVO sr) throws Exception{
 		mapper.srInsert(sr);
 	}
+	
+
 }
