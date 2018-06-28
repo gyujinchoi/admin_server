@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.ktds.giga.domain.BatchCreationVO;
 import com.ktds.giga.domain.SRListVO;
+import com.ktds.giga.domain.UserListVO;
 import com.ktds.giga.mapper.BatchCreationMapper;
 
 @Service
@@ -31,6 +32,10 @@ public class BatchCreationService {
 	
 	public List<SRListVO> selectSRListByVer(String mrVersion) throws Exception {
 		return mapper.selectSRListByVer(mrVersion);
+	}
+	
+	public List<UserListVO> selectUserList()  throws Exception {
+		return mapper.selectUserList();
 	}
 	 
 }

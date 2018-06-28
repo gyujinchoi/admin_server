@@ -33,9 +33,66 @@
 </head>
 
 <body>
-   <h1>신규 SR 등록</h1>
+	<div class="container">
+		<h2>SR 등록</h2>
+		<form class="form-horizontal" name="registerSRForm" >
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="text">시스템구분</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="system_name"
+						placeholder="시스템구분" name="system_name">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="text">배포버전</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="mr_version"
+						placeholder="배포버전" name="mr_version">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="text">상태</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="status"
+						placeholder="상태" name="status">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="text">SR번호</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="sr_id"
+						placeholder="SR 번호" name="sr_id">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="text">제목</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="subject"
+						placeholder="SR 제목" name="subject">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="text">내용</label>
+				<div class="col-sm-10">
+					<textarea class="form-control" rows="5" id="spec"></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="text">개발스펙</label>
+				<div class="col-sm-10">
+					 <textarea class="form-control" rows="5" id="spec"></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button class="btn btn-default" type="submit">등록</button>
+					<button class="btn btn-default" onclick="exit()">종료</button>
+				</div>
+			</div>
+		</form>
+	</div>
 
-    <!-- jQuery -->
+	<!-- jQuery -->
     <script src="../vendor/jquery/jquery.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
@@ -46,6 +103,22 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
+
+	<script>
+		$('form').on('submit', function(event) {
+
+			// Prevent the page from reloading
+			event.preventDefault();
+			
+			// Set the text-output span to the value of the first input
+			
+			
+		});
+
+		function exit() {
+			window.close();
+		}
+	</script>
 
 </body>
 

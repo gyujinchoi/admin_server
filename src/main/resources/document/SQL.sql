@@ -1,4 +1,13 @@
-﻿--이슈
+﻿SELECT b.firstname, b.id
+FROM redmine.members a, redmine.users b
+WHERE a.user_id = b.id
+AND a.project_id = '72';
+
+--사용자
+SELECT *
+FROM redmine.users
+
+--이슈
 SELECT *
 FROM redmine.issues;
 

@@ -25,4 +25,13 @@
 		FROM redmine.service_request
 		WHERE mr_version = #{mr_version};
 	</select>	
+	
+    <select id="selectUserList" resultType="com.ktds.giga.domain.UserListVO">
+		SELECT b.firstname, b.id
+		FROM redmine.members a, redmine.users b
+		WHERE a.user_id = b.id
+		AND a.project_id = '72';
+	</select>		
+	
+
 </mapper>

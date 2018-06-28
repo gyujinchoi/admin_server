@@ -2,6 +2,7 @@ package com.ktds.giga.domain;
 
 public class SRListVO {
 		
+		private String id;
 		private String system_name;
 		private String mr_version;
 		private String status;
@@ -11,6 +12,13 @@ public class SRListVO {
 		private String description;
 		private String spec;
 		
+		
+		public String getId() {
+			return id;
+		}
+		public void setId(String id) {
+			this.id = id;
+		}
 		public String getSystem_name() {
 			return system_name;
 		}
