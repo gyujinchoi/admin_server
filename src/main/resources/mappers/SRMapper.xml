@@ -8,6 +8,8 @@
             	* 
             FROM 
             	redmine.service_request
+            ORDER BY
+            	reg_date ASC;
     </select>
     
     <insert id="srInsert" parameterType="com.ktds.giga.domain.SRListVO">
